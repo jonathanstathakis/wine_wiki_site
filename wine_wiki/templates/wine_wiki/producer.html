@@ -19,5 +19,8 @@
             {% endfor %}
         </ul>
 </div>
+    <div class="prod-meta">
+    <a class="button" href={% url 'admin:wine_wiki_producer_change' producer.id %}>update</a>
+  </div>
     </div>
 {% endblock %}
