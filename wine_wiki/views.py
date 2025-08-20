@@ -43,8 +43,10 @@ class WineListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        wine_list = Wine.objects.all().order_by(
-            "section__order", "subsection__order", "line_num_tot"
+        wine_list = (
+            Wine.objects.all()
+            .select_related("section", "subsection", "producer", "variety")
+            .order_by("section__order", "subsection__order", "line_num_tot")
         )
 
         grouped = defaultdict(lambda: defaultdict(list))
