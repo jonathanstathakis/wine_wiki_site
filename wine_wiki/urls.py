@@ -38,7 +38,11 @@ urlpatterns = [
         view=generic.TemplateView.as_view(template_name="wine_wiki/changelog.html"),
         name="changelog",
     ),
-    path("wine-list/", view=views.WineListView.as_view(), name="wine-list"),
+    path(
+        "bennelong-wine-list/",
+        view=views.BennelongWineListView.as_view(),
+        name="bennelong-wine-list",
+    ),
     path("wine/<int:pk>/", view=views.WineView.as_view(), name="wine"),
     path("update/<int:pk>/", view=views.WineUpdateView.as_view(), name="wine-update"),
     path(

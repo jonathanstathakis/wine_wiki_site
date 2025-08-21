@@ -84,16 +84,6 @@ class SubSubSection(models.Model):
 class Wine(models.Model):
     """base class representing a wine object"""
 
-    # bennelong-wine-list fields
-    line_num_tot = models.IntegerField(
-        null=True, default=-1
-    )  # -1 implies missing number, can apply a default sort by name in view
-    page_num = models.IntegerField(null=False, default=-1)
-    page_line_num = models.IntegerField(null=False, default=-1)
-    section = models.ForeignKey(Section, on_delete=models.PROTECT, null=True)
-    subsection = models.ForeignKey(SubSection, on_delete=models.PROTECT, null=True)
-    subsubsection = models.CharField(default="")
-
     # wine-list-etl fields
     merged_text_ext = models.TextField(
         blank=True,
@@ -200,9 +190,6 @@ class Wine(models.Model):
         wine_title = ", ".join([str(x) for x in title_fields if x is not None])
         return wine_title
 
-    class Meta:
-        ordering = ("section__order", "subsection__order", "line_num_tot")
-
 
 class BennelongWineList(models.Model):
     """Bennelong wine list data"""
@@ -216,3 +203,9 @@ class BennelongWineList(models.Model):
     subsection = models.ForeignKey(SubSection, on_delete=models.PROTECT, null=True)
     subsubsection = models.CharField(default="")
     wine = models.ForeignKey(to=Wine, null=True, on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ("section__order", "subsection__order", "line_num_tot")
+
+    def __str__(self):
+        return f"{self.line_num_tot=}, {self.page_num=}, {self.section.section=}, {self.subsection.subsection=}, {self.subsubsection=}, {self.wine.__str__()=}"

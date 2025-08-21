@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Wine, Producer, Variety
+from .models import Wine, Producer, Variety, BennelongWineList
 
 
 class WineAdmin(admin.ModelAdmin):
@@ -20,6 +20,11 @@ class VarietyAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
+class BennelongWineListAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Wine, WineAdmin)
 admin.site.register(Producer, ProducerAdmin)
 admin.site.register(Variety, VarietyAdmin)
+admin.site.register(BennelongWineList, BennelongWineListAdmin)

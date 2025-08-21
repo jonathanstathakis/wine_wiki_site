@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
-from .models import Producer, Wine, Variety
+from .models import BennelongWineList, Producer, Wine, Variety
 from collections import defaultdict
 from django.urls import reverse, reverse_lazy
 from .forms import UserRegisterForm
@@ -74,6 +74,67 @@ class WineListView(generic.ListView):
         query = self.request.GET.get("q")
 
         context["query"] = query
+        return context
+
+
+class BennelongWineListView(generic.ListView):
+    model = BennelongWineList
+    template_name = "wine_wiki/bennelong_wine_list.html"
+    context_object_name = "wine_list"
+
+    def get_queryset(self):
+        """
+        use the search form in wine_list.html to filter the wines present
+        in db.
+        """
+
+        query = self.request.GET.get("q")
+        if query:
+            object_list = BennelongWineList.objects.filter(
+                Q(wine__base_year__icontains=query)
+                | Q(wine__classification__icontains=query)
+                | Q(wine__commune__icontains=query)
+                | Q(wine__disgorg_year__icontains=query)
+                | Q(wine__producer__name__icontains=query)
+                | Q(wine__region__icontains=query)
+                | Q(wine__variety__name__icontains=query)
+                | Q(wine__series__icontains=query)
+                | Q(wine__state__icontains=query)
+                # TODO: figure out how to search tags
+                | Q(wine__tags__name__icontains=query)
+                | Q(wine__vineyard__icontains=query)
+                | Q(wine__vintage__icontains=query)
+                | Q(wine__volume__icontains=query)
+                | Q(wine__wine_name__icontains=query)
+            )
+        else:
+            object_list = BennelongWineList.objects.all()
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        object_list = context["object_list"]
+
+        wine_list = object_list.select_related(
+            "section", "subsection", "wine"
+        ).order_by("section__order", "subsection__order", "line_num_tot")
+
+        grouped = defaultdict(lambda: defaultdict(list))
+
+        for row in wine_list:
+            grouped[row.section][row.subsection].append(row.wine)
+
+        # have to pass a dict to context rather than defaultdict
+        context["grouped_wines"] = {
+            str(k): {str(u): w for u, w in v.items()} for k, v in grouped.items()
+        }
+
+        query = self.request.GET.get("q")
+
+        context["query"] = query
+
+        breakpoint()
         return context
 
 
