@@ -28,5 +28,11 @@ class Migration(migrations.Migration):
                 wine_wiki_wine.variety_id = b.id
 
 """),
+            state_operations=[
+                migrations.RemoveField(
+                    model_name="wine",
+                    name="variety_old",
+                ),
+            ],
         )
     ]
