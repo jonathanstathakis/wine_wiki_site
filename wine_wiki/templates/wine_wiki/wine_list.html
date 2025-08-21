@@ -1,6 +1,16 @@
 {% extends "wine_wiki/base.html" %}
 {% block content %}
     <h1>Wine List</h1>
+      <div class="wine-list-search">
+        <form action="{% url 'wine_wiki:wine-list' %}" method="get">
+          <input name="q" type="text" placeholder="Search wines..">
+        </form>
+
+      {% if query %}
+      <p>Searching term: "{{ query|default_if_none:"" }}"</p>
+      {% endif %}
+
+      </div>
     <div class="wine-list-container">
         <div class="wine-list">
             {% for group, cat in grouped_wines.items %}

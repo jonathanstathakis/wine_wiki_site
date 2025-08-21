@@ -8,6 +8,7 @@ from .forms import UserRegisterForm
 from django.views.generic.edit import CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django.db.models import Q
 # Create your views here.
 
 
@@ -22,11 +23,40 @@ class WineListView(generic.ListView):
     template_name = "wine_wiki/wine_list.html"
     context_object_name = "wine_list"
 
+    def get_queryset(self):
+        """
+        use the search form in wine_list.html to filter the wines present
+        in db.
+        """
+
+        query = self.request.GET.get("q")
+        if query:
+            object_list = Wine.objects.filter(
+                Q(base_year__icontains=query)
+                | Q(classification__icontains=query)
+                | Q(commune__icontains=query)
+                | Q(disgorg_year__icontains=query)
+                | Q(producer__name__icontains=query)
+                | Q(region__icontains=query)
+                | Q(variety__name__icontains=query)
+                | Q(series__icontains=query)
+                | Q(state__icontains=query)
+                # TODO: figure out how to search tags
+                | Q(tags__name__icontains=query)
+                | Q(vineyard__icontains=query)
+                | Q(vintage__icontains=query)
+                | Q(volume__icontains=query)
+                | Q(wine_name__icontains=query)
+            )
+        else:
+            object_list = Wine.objects.all()
+        return object_list
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         wine_list = (
-            Wine.objects.all()
+            context["object_list"]
             .select_related("section", "subsection", "producer", "variety")
             .order_by("section__order", "subsection__order", "line_num_tot")
         )
@@ -40,6 +70,10 @@ class WineListView(generic.ListView):
         context["grouped_wines"] = {
             str(k): {str(u): w for u, w in v.items()} for k, v in grouped.items()
         }
+
+        query = self.request.GET.get("q")
+
+        context["query"] = query
         return context
 
 
