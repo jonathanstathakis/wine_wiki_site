@@ -184,5 +184,16 @@ class Wine(models.Model):
             " ", "+"
         ).replace("++", "+")  # in the event of null fields
 
+    def wine_title(self):
+        title_fields = [
+            wine.vintage,
+            wine.producer,
+            wine.cuvee_name,
+            wine.variety,
+        ]
+
+        wine_title = ", ".join([str(x) for x in title_fields if x is not None])
+        return wine_title
+
     class Meta:
         ordering = ("section__order", "subsection__order", "line_num_tot")
