@@ -43,6 +43,11 @@ urlpatterns = [
         view=views.BennelongWineListView.as_view(),
         name="bennelong-wine-list",
     ),
+    path(
+        "wine-list/",
+        view=views.WineListView.as_view(),
+        name="wine-list",
+    ),
     path("wine/<int:pk>/", view=views.WineView.as_view(), name="wine"),
     path("update/<int:pk>/", view=views.WineUpdateView.as_view(), name="wine-update"),
     path(

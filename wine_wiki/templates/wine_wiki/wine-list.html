@@ -1,0 +1,41 @@
+{% extends "wine_wiki/base.html" %} {% block content %}
+<h1>Wine List</h1>
+<div class="wine-list-search">
+    <form action="{% url 'wine_wiki:wine-list' %}" method="get">
+        <input name="q" type="text" placeholder="Search wines.." />
+    </form>
+
+    {% if query %}
+    <p>Searching term: "{{ query|default_if_none:"" }}"</p>
+    {% endif %}
+</div>
+<div class="wine-list-container">
+    <div class="wine-list">
+        {% for wine in object_list %}
+        <div
+            class="wine_list_row"
+            onclick='window.location="{% url "wine_wiki:wine" wine.pk %}"'
+        >
+            <div class="wine_list_vintage">
+                {{ wine.vintage|default_if_none:""|upper }}
+            </div>
+            <!-- -->
+            <div class="wine_list_wine_name_producer" ;>
+                {{ wine.producer|default_if_none:""|title }}
+                {{wine.cuvee_name|default_if_none:""|title }}
+                {{wine.variety|default_if_none:""|title }}
+            </div>
+            <div class="wine_list_region">
+                {{ wine.subregion|default_if_none:""|title }}
+                {{wine.region|default_if_none:""|title }}
+                {{wine.state|default_if_none:""|title }}
+            </div>
+            <div class="wine_list_volume">
+                {% comment volume col %} {%endcomment %}
+            </div>
+            <div class="wine_list_price" style="">{{ wine.price }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

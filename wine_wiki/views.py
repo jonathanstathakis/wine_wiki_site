@@ -20,8 +20,7 @@ class WineView(generic.DetailView):
 
 class WineListView(generic.ListView):
     model = Wine
-    template_name = "wine_wiki/wine_list.html"
-    context_object_name = "wine_list"
+    template_name = "wine_wiki/wine-list.html"
 
     def get_queryset(self):
         """
@@ -54,22 +53,6 @@ class WineListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        wine_list = (
-            context["object_list"]
-            .select_related("section", "subsection", "producer", "variety")
-            .order_by("section__order", "subsection__order", "line_num_tot")
-        )
-
-        grouped = defaultdict(lambda: defaultdict(list))
-
-        for wine in wine_list:
-            grouped[wine.section][wine.subsection].append(wine)
-
-        # have to pass a dict to context rather than defaultdict
-        context["grouped_wines"] = {
-            str(k): {str(u): w for u, w in v.items()} for k, v in grouped.items()
-        }
 
         query = self.request.GET.get("q")
 
@@ -134,7 +117,6 @@ class BennelongWineListView(generic.ListView):
 
         context["query"] = query
 
-        breakpoint()
         return context
 
 
