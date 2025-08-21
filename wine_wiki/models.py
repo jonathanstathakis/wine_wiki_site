@@ -84,6 +84,7 @@ class SubSubSection(models.Model):
 class Wine(models.Model):
     """base class representing a wine object"""
 
+    # bennelong-wine-list fields
     line_num_tot = models.IntegerField(
         null=True, default=-1
     )  # -1 implies missing number, can apply a default sort by name in view
@@ -92,13 +93,24 @@ class Wine(models.Model):
     section = models.ForeignKey(Section, on_delete=models.PROTECT, null=True)
     subsection = models.ForeignKey(SubSection, on_delete=models.PROTECT, null=True)
     subsubsection = models.CharField(default="")
-    vintage = models.CharField(max_length=4, blank=True, null=True, default=None)
+
+    # wine-list-etl fields
     merged_text_ext = models.TextField(
         blank=True,
         null=True,
         default=None,
     )  # left over from field extractoin, also here for debugging
+    merged_text = models.TextField(
+        blank=True,
+        null=True,
+        default=None,
+    )  # the initial extracted text, useful for downstream debugging
 
+    # bpos fields
+    bpos_key = models.CharField(max_length=100, blank=True, null=True, default=None)
+
+    # remaining fields
+    vintage = models.CharField(max_length=4, blank=True, null=True, default=None)
     base_year = models.IntegerField(
         blank=True,
         null=True,
@@ -107,11 +119,6 @@ class Wine(models.Model):
     cuvee_name = models.TextField(blank=True, null=True, default=None)
     disgorg_year = models.IntegerField(blank=True, null=True, default=None)
     price = models.IntegerField(blank=True, default=0)
-    merged_text = models.TextField(
-        blank=True,
-        null=True,
-        default=None,
-    )  # the initial extracted text, useful for downstream debugging
     producer = models.ForeignKey(to=Producer, null=True, on_delete=models.PROTECT)
     dryness = models.CharField(max_length=100, blank=True, null=True, default=None)
     country = models.CharField(max_length=100, blank=True, null=True, default=None)
@@ -128,7 +135,6 @@ class Wine(models.Model):
     )
     volume = models.CharField(max_length=100, blank=True, null=True, default=None)
     series = models.CharField(max_length=100, blank=True, null=True, default=None)
-    bpos_key = models.CharField(max_length=100, blank=True, null=True, default=None)
     description = models.TextField(
         blank=True,
         null=True,
@@ -136,7 +142,6 @@ class Wine(models.Model):
         help_text="All unstructured information about the wine. Supports Markdown formatting (see <a href=https://www.markdownguide.org/>guide</a>). Description is a 2nd level header field within the page, try to use third level and lower if including headers.",
     )
 
-    is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(
         auto_now_add=True
     )  # date added to website database
@@ -186,10 +191,10 @@ class Wine(models.Model):
 
     def wine_title(self):
         title_fields = [
-            wine.vintage,
-            wine.producer,
-            wine.cuvee_name,
-            wine.variety,
+            self.vintage,
+            self.producer,
+            self.cuvee_name,
+            self.variety,
         ]
 
         wine_title = ", ".join([str(x) for x in title_fields if x is not None])
@@ -197,3 +202,17 @@ class Wine(models.Model):
 
     class Meta:
         ordering = ("section__order", "subsection__order", "line_num_tot")
+
+
+class BennelongWineList(models.Model):
+    """Bennelong wine list data"""
+
+    line_num_tot = models.IntegerField(
+        null=True, default=-1
+    )  # -1 implies missing number, can apply a default sort by name in view
+    page_num = models.IntegerField(null=False, default=-1)
+    page_line_num = models.IntegerField(null=False, default=-1)
+    section = models.ForeignKey(Section, on_delete=models.PROTECT, null=True)
+    subsection = models.ForeignKey(SubSection, on_delete=models.PROTECT, null=True)
+    subsubsection = models.CharField(default="")
+    wine = models.ForeignKey(to=Wine, null=True, on_delete=models.PROTECT)
