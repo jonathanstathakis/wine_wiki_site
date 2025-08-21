@@ -56,6 +56,13 @@ class WineListView(generic.ListView):
 
         query = self.request.GET.get("q")
 
+        object_list = context["object_list"]
+
+        context["object_list"] = object_list.select_related(
+            "producer",
+            "variety",
+        ).prefetch_related("tags")  # if you want tags
+
         context["query"] = query
         return context
 
@@ -99,9 +106,21 @@ class BennelongWineListView(generic.ListView):
 
         object_list = context["object_list"]
 
-        wine_list = object_list.select_related(
-            "section", "subsection", "wine"
-        ).order_by("section__order", "subsection__order", "line_num_tot")
+        wine_list = (
+            object_list.select_related(
+                "section",
+                "subsection",
+                "wine",
+                "wine__producer",
+                "wine__variety",
+            )
+            .prefetch_related("wine__tags")  # if you want tags
+            .order_by("section__order", "subsection__order", "line_num_tot")
+        )
+
+        # wine_list = object_list.select_related(
+        #     "section", "subsection", "wine"
+        # ).order_by("section__order", "subsection__order", "line_num_tot")
 
         grouped = defaultdict(lambda: defaultdict(list))
 

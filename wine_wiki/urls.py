@@ -20,6 +20,7 @@ from . import views
 from django.views.generic.base import RedirectView
 from django.views import generic
 from django.contrib import admin
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 app_name = "wine_wiki"
 

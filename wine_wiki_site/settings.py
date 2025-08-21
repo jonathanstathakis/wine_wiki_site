@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     "wine_wiki_site.apps.WineWikiSiteConfig",
     "dbbackup",
     "taggit",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -132,3 +134,5 @@ LOGIN_REDIRECT_URL = "/"  # new
 
 DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
 DBBACKUP_STORAGE_OPTIONS = {"location": BASE_DIR / "backup"}
+
+INTERNAL_IPS = ["127.0.0.1"]
