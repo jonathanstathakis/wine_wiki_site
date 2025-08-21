@@ -16,24 +16,6 @@ class WineView(generic.DetailView):
     template_name = "wine_wiki/wine.html"
     context_object_name = "wine"
 
-    def get_context_data(self, **kwargs):
-        context = super(WineView, self).get_context_data(**kwargs)
-
-        wine = context["wine"]
-
-        title_fields = [
-            wine.vintage,
-            wine.producer,
-            wine.cuvee_name,
-            wine.variety,
-        ]
-
-        context["wine_title"] = ", ".join(
-            [str(x) for x in title_fields if x is not None]
-        )
-
-        return context
-
 
 class WineListView(generic.ListView):
     model = Wine
