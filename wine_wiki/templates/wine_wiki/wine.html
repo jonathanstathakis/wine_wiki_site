@@ -3,7 +3,7 @@
 {% block content %}
     <div class="wine-container">
         <div class="wine-content">
-            <h1>{{ wine_title }}</h1>
+            <h1>{{ wine_title|title}}</h1>
             <p style="font-size: 0.75em">
                 <em>Last modification: {{ wine.modification_on }} by {{ wine.last_modification_by }}</em>
             </p>
@@ -28,9 +28,9 @@
                 <li>
                     Producer: <a href="{{ wine.producer.get_absolute_url }}">{{ wine.producer.name|title }}</a>
                 </li>
-                <li>Vintage: {{ wine.vintage }}</li>
-                <li>Region: {{ wine.region }}</li>
-                <li>Subregion: {{ wine.subregion }}</li>
+                <li>Vintage: {{ wine.vintage|title }}</li>
+                <li>Region: {{ wine.region|title }}</li>
+                <li>Subregion: {{ wine.subregion|title }}</li>
                 <li>
                     Variety: <a href="{{ wine.variety.get_absolute_url }}">{{ wine.variety.name|title }}</a>
                 </li>
