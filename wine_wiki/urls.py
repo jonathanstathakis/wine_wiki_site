@@ -41,7 +41,7 @@ urlpatterns = [
     ),
     path(
         "bennelong-wine-list/",
-        view=views.BennelongWineListView.as_view(),
+        view=views.WineListDisplayView.as_view(),
         name="bennelong-wine-list",
     ),
     path(

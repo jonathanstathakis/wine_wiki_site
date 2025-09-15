@@ -1,8 +1,8 @@
 import polars as pl
 from pathlib import Path
 
-from .extract_wine_wiki import extract_wine_wiki
-from .extract_wine_list import extract_wine_list
+from extract_wine_wiki import extract_wine_wiki
+from extract_wine_list import extract_wine_list
 
 
 def main():

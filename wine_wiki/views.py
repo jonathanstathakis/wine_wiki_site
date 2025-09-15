@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
-from .models import BennelongWineList, Producer, Wine, Variety
+from .models import WineListDisplay, Producer, Wine, Variety
 from collections import defaultdict
 from django.urls import reverse, reverse_lazy
 from .forms import UserRegisterForm
@@ -24,8 +24,8 @@ class WineListView(generic.ListView):
 
     def get_queryset(self):
         """
-        use the search form in wine_list.html to filter the wines present
-        in db.
+        use the search form in wine_list.html to filter
+        the wines present in db.
         """
 
         query = self.request.GET.get("q")
@@ -67,8 +67,8 @@ class WineListView(generic.ListView):
         return context
 
 
-class BennelongWineListView(generic.ListView):
-    model = BennelongWineList
+class WineListDisplayView(generic.ListView):
+    model = WineListDisplay
     template_name = "wine_wiki/bennelong_wine_list.html"
     context_object_name = "wine_list"
 
@@ -80,7 +80,7 @@ class BennelongWineListView(generic.ListView):
 
         query = self.request.GET.get("q")
         if query:
-            object_list = BennelongWineList.objects.filter(
+            object_list = WineListDisplay.objects.filter(
                 Q(wine__base_year__icontains=query)
                 | Q(wine__classification__icontains=query)
                 | Q(wine__commune__icontains=query)
@@ -98,7 +98,7 @@ class BennelongWineListView(generic.ListView):
                 | Q(wine__wine_name__icontains=query)
             )
         else:
-            object_list = BennelongWineList.objects.all()
+            object_list = WineListDisplay.objects.all()
         return object_list
 
     def get_context_data(self, **kwargs):

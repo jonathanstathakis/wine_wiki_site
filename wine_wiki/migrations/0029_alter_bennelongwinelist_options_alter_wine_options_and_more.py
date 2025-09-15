@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='bennelongwinelist',
+            name='wineListDisplay',
             options={'ordering': ('section__order', 'subsection__order', 'line_num_tot')},
         ),
         migrations.AlterModelOptions(

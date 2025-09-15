@@ -191,7 +191,7 @@ class Wine(models.Model):
         return wine_title
 
 
-class BennelongWineList(models.Model):
+class WineListDisplay(models.Model):
     """Bennelong wine list data"""
 
     line_num_tot = models.IntegerField(
@@ -209,3 +209,29 @@ class BennelongWineList(models.Model):
 
     def __str__(self):
         return f"{self.line_num_tot=}, {self.page_num=}, {self.section.section=}, {self.subsection.subsection=}, {self.subsubsection=}, {self.wine.__str__()=}"
+
+
+class WineListRaw(models.Model):
+    """
+    the raw data from the ETL.
+
+    Kept distinct from the Display data as the raw fields are used for linking
+    bennelong the output of the ETL to the Wine and Display models.
+
+
+    filepath,pub_date,run_dt,line_num_tot,vintage,prod_wine_name,geo_int,vol,price,section_path,page_number
+    """
+
+    wine = models.ForeignKey(to=Wine, on_delete=models.PROTECT)
+    wine_list_display = models.ForeignKey(to=WineListDisplay, on_delete=models.PROTECT)
+    filepath = models.CharField()
+    pub_date = models.DateField()
+    run_dt = models.DateTimeField()
+    line_num_tot = models.IntegerField()
+    vintage = models.CharField()
+    prod_wine_name = models.CharField()
+    geo_int = models.CharField()
+    vol = models.CharField()
+    price = models.IntegerField()
+    section_path = models.CharField()
+    page_number = models.IntegerField()

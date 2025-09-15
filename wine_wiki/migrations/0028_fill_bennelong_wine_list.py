@@ -3,7 +3,7 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-from wine_wiki.models import BennelongWineList
+from wine_wiki.models import WineListDisplay
 
 
 def populate_bennelong_wine_list(apps, schema_editor):
