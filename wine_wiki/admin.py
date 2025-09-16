@@ -20,11 +20,11 @@ class VarietyAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-class WineListDisplayAdmin(admin.ModelAdmin):
+class BennelongWineListAdmin(admin.ModelAdmin):
     pass
 
 
 admin.site.register(Wine, WineAdmin)
 admin.site.register(Producer, ProducerAdmin)
 admin.site.register(Variety, VarietyAdmin)
-admin.site.register(WineListDisplay, WineListDisplayAdmin)
+admin.site.register(WineListDisplay, BennelongWineListAdmin)

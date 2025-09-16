@@ -234,3 +234,30 @@ class VarietyListView(generic.ListView):
 
     model = Variety
     template_name = "wine_wiki/variety_list.html"
+
+
+from .models import WineListUpload
+
+
+class WineListUploadListView(generic.ListView):
+    model = WineListUpload
+    template_name = "wine_wiki/winelistupload_list.html"
+
+
+class WineListUploadView(generic.DetailView):
+    model = WineListUpload
+    template_name = "wine_wiki/winelistupload.html"
+
+
+class WineListUploadCreateView(generic.CreateView):
+    model = WineListUpload
+    fields = ["name", "file"]
+    template_name = "wine_wiki/winelistupload_create.html"
+    success_url = reverse_lazy("wine_wiki:wine-list-upload-list")
+
+
+class WineListUploadDeleteView(generic.DeleteView):
+    model = WineListUpload
+    fields = ["name", "file"]
+    template_name = "wine_wiki/winelistupload_delete.html"
+    success_url = reverse_lazy("wine_wiki:wine-list-upload-list")

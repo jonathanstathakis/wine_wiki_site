@@ -1,0 +1,14 @@
+{% extends "wine_wiki/base.html" %} {% block content %}
+<form method="post">
+    {% csrf_token %}
+    <p>
+        Are you sure you want to delete: "{{object}}" uploaded on
+        {{object.dt_upload}}?
+    </p>
+    <input type="submit" value="Confirm" />
+    <a class="button" href="{% url 'wine-wiki:wine-list-upload-list' %}"
+        >Go Back</a
+    >
+</form>
+
+{% endblock %}

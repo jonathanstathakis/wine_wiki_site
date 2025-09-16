@@ -65,7 +65,7 @@ div.wine_list_row {
 
 .container {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -90,13 +90,12 @@ div.wine_list_row {
 
 .content {
   padding: 0.1em;
-  flex-grow: 1;
+  flex: 1;
   overflow: auto;
   min-height: 2em;
 }
 .footer {
   padding: 0.1em;
-  flex-shrink: 0;
   border-top: 1px solid black;
 }
 
@@ -167,4 +166,11 @@ div.wine_list_row {
 
 .wine-tags li + li {
   margin-left: .5rem;
+}
+
+.wine_list_upload {
+  border: 1px solid black;
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
 }

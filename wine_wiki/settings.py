@@ -127,3 +127,5 @@ LOGIN_REDIRECT_URL = "/"  # new
 
 DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
 DBBACKUP_STORAGE_OPTIONS = {"location": BASE_DIR / "backup"}
+
+MEDIA_ROOT = BASE_DIR / "media"

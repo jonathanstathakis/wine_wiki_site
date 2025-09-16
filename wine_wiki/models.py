@@ -235,3 +235,15 @@ class WineListRaw(models.Model):
     price = models.IntegerField()
     section_path = models.CharField()
     page_number = models.IntegerField()
+
+
+class WineListUpload(models.Model):
+    file = models.FileField(upload_to="wine_list/")
+    name = models.CharField(unique=True)
+    dt_upload = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("wine_wiki:wine-list-upload", kwargs={"pk": self.pk})
+
+    def __str__(self):
+        return str(self.name)

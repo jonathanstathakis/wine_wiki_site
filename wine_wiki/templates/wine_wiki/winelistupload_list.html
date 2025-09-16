@@ -1,0 +1,48 @@
+{% extends "wine_wiki/base.html" %}
+{% block content %}
+<h1>Wine List Upload</h1>
+
+<p>
+    This page will display information on uploaded wine list csv files
+    (eventually PDF's).
+</p>
+    <div>
+        <table class="wine_list_upload" rules="all">
+    <tr>
+    <th>#</th>
+    <th>Name</th>
+    <th>DateTime of Upload</th>
+    <th></th>
+    </tr>
+        {% for wine_list_upload in object_list %}
+    <tr>
+    <td>
+        {{ forloop.counter }}
+    </td>
+
+    <td>
+       {{ wine_list_upload.name|title }}
+</td>
+      <td>
+{{ wine_list_upload.dt_upload }}
+</td>
+      <td>
+      
+    <a class="button" href="{% url 'wine_wiki:wine-list-upload-delete' wine_list_upload.pk %}"> delete </a>
+      </td>
+  </tr>
+    {% endfor %}
+    </table>
+    </div>
+
+<div>
+<h2>Other Optiions</h2>
+  <ul>
+<li><a href="{% url 'wine-wiki:wine-list-upload-create' %}"> add new wine list upload edition
+</a></li>
+</ul>
+</div>
+
+
+
+{% endblock %}

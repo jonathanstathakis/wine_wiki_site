@@ -16,6 +16,8 @@ Including another URLconf
 """
 
 from django.urls import path, include
+
+from wine_wiki.models import WineListUpload
 from . import views
 from django.views.generic.base import RedirectView
 from django.views import generic
@@ -73,6 +75,21 @@ urlpatterns = [
     path("producer/<int:pk>/", view=views.ProducerView.as_view(), name="producer"),
     path("variety-list/", view=views.VarietyListView.as_view(), name="variety-list"),
     path("variety/<int:pk>/", view=views.VarietyView.as_view(), name="variety"),
+    path(
+        "wine-list-upload/list/",
+        view=views.WineListUploadListView.as_view(),
+        name="wine-list-upload-list",
+    ),
+    path(
+        "wine-list-upload/create/",
+        view=views.WineListUploadCreateView.as_view(),
+        name="wine-list-upload-create",
+    ),
+    path(
+        "wine-list-upload/delete/<int:pk>/",
+        view=views.WineListUploadDeleteView.as_view(),
+        name="wine-list-upload-delete",
+    ),
     # path("accounts/", include("django.contrib.auth.urls")),  # new
     # path("sign_up/", view=views.SignUpView.as_view(), name="sign-up"),
 ]
