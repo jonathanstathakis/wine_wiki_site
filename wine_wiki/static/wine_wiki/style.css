@@ -174,3 +174,23 @@ div.wine_list_row {
   width: 100%;
   text-align: center;
 }
+
+.fuzzy_match_results {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto;   /* let browser size based on content */
+}
+
+.fuzzy_match_results th,
+.fuzzy_match_results td {
+  border: 1px solid #ccc;
+  padding: 4px 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.results_form_field_readonly {
+  width: 100%;          /* input stretches to fill whatever the cell decides */
+  max-width: none;       /* don’t cap it */
+  box-sizing: border-box;
+}

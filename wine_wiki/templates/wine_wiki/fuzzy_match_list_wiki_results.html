@@ -1,0 +1,56 @@
+{% extends "wine_wiki/base.html" %} {% block content %}
+
+<h1>Fuzzy Match Review</h1>
+
+<p>Wine List edition {{wle}}</p>
+
+<p>Number of rows: {{formset|length}}</p>
+<p>
+    Please review each pairing row and mark review with a tick if the pairing is
+    correct. The default is to reject a pairing.
+</p>
+<p>Anything with Score > 90 is pretty much guaranteed to be a match.</p>
+<p>Once you are finished accepting pairs, click button marked 'OK'.</p>
+
+<h2>Results</h2>
+
+<form method="post" action="">
+    <input type="submit" value="OK" />
+    {% csrf_token %} {{formset.management_form}}
+    <table class="fuzzy_match_results">
+        <colgroup>
+            <col style="width: 40%" />
+            <col style="width: 40%" />
+            <col style="width: 10%" />
+            <col style="width: 10%" />
+        </colgroup>
+        <tr>
+            <th>List</th>
+            <th>Wiki</th>
+            <th>Score</th>
+            <th>Review</th>
+        </tr>
+        {% for form in formset %} {% for field in form.hidden_fields %}
+        {{field}} {% endfor %}
+        <tr>
+            <td>
+                <a
+                    href="{% url 'wine_wiki:bennelong-wine-list-detail' form.instance.wine_list.id %}"
+                    >{{ form.instance.wine_list_query }}</a
+                >
+            </td>
+            <td>
+                <a href="{% url 'wine_wiki:wine' form.instance.wiki_id %}"
+                    >{{ form.instance.wiki_choice }}</a
+                >
+            </td>
+            <td>{{ form.instance.match_score }}</td>
+            <td>{{ form.review }}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+</form>
+
+<p>form ends here.</p>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "wine_wiki/base.html" %} {% block content %}
+<h1>Bennlong Wine List Entry</h1>
+
+<table class="fuzzy_match_results" , style="width: auto">
+    <tr>
+        <th>field name</th>
+        <th>field value</th>
+    </tr>
+    {% for key, val in wine.fields.items %}
+    <tr>
+        <td>{{key}}</td>
+        <td>{{val}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

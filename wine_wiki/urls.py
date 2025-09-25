@@ -47,6 +47,11 @@ urlpatterns = [
         name="bennelong-wine-list",
     ),
     path(
+        "bennelong-wine-detail/<int:pk>/",
+        view=views.WineListDisplayDetailView.as_view(),
+        name="bennelong-wine-list-detail",
+    ),
+    path(
         "wine-list/",
         view=views.WineListView.as_view(),
         name="wine-list",
@@ -90,6 +95,24 @@ urlpatterns = [
         view=views.WineListUploadDeleteView.as_view(),
         name="wine-list-upload-delete",
     ),
-    # path("accounts/", include("django.contrib.auth.urls")),  # new
-    # path("sign_up/", view=views.SignUpView.as_view(), name="sign-up"),
+    path(
+        "wine-list-raw-create/",
+        view=views.winelistupload_ingestfromcsv,
+        name="wine-list-raw-create",
+    ),
+    path(
+        "start-fuzzy-match-list-wiki/",
+        view=views.StartFuzzyMatchListWikiView.as_view(),
+        name="start-fuzzy-match-list-wiki",
+    ),
+    path(
+        "fuzzy-match-list-wiki-results/",
+        view=views.fuzzymatchlistwiki_review_view,
+        name="fuzzy-match-list-wiki-results",
+    ),
+    path(
+        "fuzzy-match-list-wiki-summary/",
+        view=views.FuzzyMatchlistWikiSummaryView.as_view(),
+        name="fuzzy-match-list-wiki-summary",
+    ),
 ]

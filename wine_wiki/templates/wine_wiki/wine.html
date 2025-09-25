@@ -3,7 +3,7 @@
 {% block content %}
     <div class="wine-container">
         <div class="wine-content">
-            <h1>{{ wine_title|title}}</h1>
+            <h1>{{wine.wine_title|title}}</h1>
             <p style="font-size: 0.75em">
                 <em>Last modification: {{ wine.modification_on }} by {{ wine.last_modification_by }}</em>
             </p>
@@ -36,6 +36,22 @@
                 </li>
             </ul>
 
+
+          <em>Wine fields with values:</em>
+          {% for key, val in wine.wine_fields.items %}
+          {% if val %}
+          <p>{{key}}: {{val}}</p>
+          {% endif %}
+          {% endfor %}
+
+          <em>Wine fields without values:</em>
+          {% for key, val in wine.wine_fields.items %}
+          {% if not val %}
+          <p>{{key}}: {{val}}</p>
+          {% endif %}
+          {% endfor %}
+
+          
             <h2>Tags</h2>
             <div class="wine-tags">
             <ul>
@@ -49,5 +65,7 @@
     <a class="button" href={% url 'admin:wine_wiki_wine_change' wine.id %}>update</a>
   </div>
     </div>
+
+
     
 {% endblock %}

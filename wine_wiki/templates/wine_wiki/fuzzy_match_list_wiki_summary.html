@@ -1,0 +1,41 @@
+{% extends "wine_wiki/base.html" %} {% block content %} {% load static %}
+<h1>Fuzzy Match Review Results Summary</h1>
+
+<div style="display: flex; flex-direction:column">
+  <p>
+  Wine List edition {{wle}}
+  </p>
+  <p>
+This match run found {{matched_pairs|length}} matches. There are
+{{unmatched_pairs|length}} wines left to match.
+</p>
+  <div style="display: flex; gap: 1em">
+    <a class="button" href={% url 'wine_wiki:start-fuzzy-match-list-wiki'  %}>Run Again</a>
+    <a class="button" href={% url 'wine_wiki:home'  %}>Exit</a>
+</div>
+<div>
+<h2>Current Run Matched Pairs</h2>
+
+<table class="fuzzy_match_results">
+    <tr>
+        <th>Paired By</th>
+        <th>List</th>
+        <th>Wiki</th>
+    </tr>
+    {% for pair in matched_pairs %}
+    <tr>
+        <td>{{pair.get_paired_by_display}}</td>
+        <td>{{pair.wiki_choice}}</td>
+        <td>{{pair.wine_list_query}}</td>
+    </tr>
+
+    {% empty %}
+  <tr>
+   <td>No matched pairs formed.
+</td> 
+  </tr>
+{% endfor %}
+</table>
+</div>
+
+ {% endblock %}

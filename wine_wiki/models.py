@@ -1,10 +1,10 @@
-from django.contrib.admin import display
 from django.db import models
-from django.contrib.auth.models import User
-from django.template.defaultfilters import default, slugify
-from django.utils.translation import autoreload_started
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from django.utils.translation import gettext_lazy as _
+import time
+
+epoch_start = time.gmtime(0)
 
 
 class Producer(models.Model):
@@ -19,11 +19,11 @@ class Producer(models.Model):
     def get_absolute_url(self):
         return reverse("wine_wiki:producer", kwargs={"pk": self.pk})
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ("region", "name")
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Variety(models.Model):
@@ -179,62 +179,54 @@ class Wine(models.Model):
             " ", "+"
         ).replace("++", "+")  # in the event of null fields
 
+    def field_names(self) -> list[str]:
+        return [
+            "vintage",
+            "base_year",
+            "disgorg_year",
+            "producer_id",
+            "cuvee_name",
+            "dryness",
+            "country",
+            "state",
+            "region",
+            "subregion",
+            "commune",
+            "vineyard",
+            "wine_name",
+            "variety_id",
+            "style",
+            "classification",
+            "series",
+            "volume",
+        ]
+
     def wine_title(self):
         title_fields = [
             self.vintage,
-            self.producer,
+            self.producer.name,
+            self.series,
             self.cuvee_name,
+            self.wine_name,
             self.variety,
+            self.region,
+            self.subregion,
+            self.commune,
+            self.vineyard,
+            self.style,
+            self.classification,
+            self.volume,
         ]
 
-        wine_title = ", ".join([str(x) for x in title_fields if x is not None])
+        wine_title = ", ".join(
+            [str(x) for x in title_fields if (x is not None and x != "")]
+        )
         return wine_title
 
-
-class WineListDisplay(models.Model):
-    """Bennelong wine list data"""
-
-    line_num_tot = models.IntegerField(
-        null=True, default=-1
-    )  # -1 implies missing number, can apply a default sort by name in view
-    page_num = models.IntegerField(null=False, default=-1)
-    page_line_num = models.IntegerField(null=False, default=-1)
-    section = models.ForeignKey(Section, on_delete=models.PROTECT, null=True)
-    subsection = models.ForeignKey(SubSection, on_delete=models.PROTECT, null=True)
-    subsubsection = models.CharField(default="")
-    wine = models.ForeignKey(to=Wine, null=True, on_delete=models.PROTECT)
-
-    class Meta:
-        ordering = ("section__order", "subsection__order", "line_num_tot")
-
-    def __str__(self):
-        return f"{self.line_num_tot=}, {self.page_num=}, {self.section.section=}, {self.subsection.subsection=}, {self.subsubsection=}, {self.wine.__str__()=}"
-
-
-class WineListRaw(models.Model):
-    """
-    the raw data from the ETL.
-
-    Kept distinct from the Display data as the raw fields are used for linking
-    bennelong the output of the ETL to the Wine and Display models.
-
-
-    filepath,pub_date,run_dt,line_num_tot,vintage,prod_wine_name,geo_int,vol,price,section_path,page_number
-    """
-
-    wine = models.ForeignKey(to=Wine, on_delete=models.PROTECT)
-    wine_list_display = models.ForeignKey(to=WineListDisplay, on_delete=models.PROTECT)
-    filepath = models.CharField()
-    pub_date = models.DateField()
-    run_dt = models.DateTimeField()
-    line_num_tot = models.IntegerField()
-    vintage = models.CharField()
-    prod_wine_name = models.CharField()
-    geo_int = models.CharField()
-    vol = models.CharField()
-    price = models.IntegerField()
-    section_path = models.CharField()
-    page_number = models.IntegerField()
+    def wine_fields(self):
+        """print all user-relevant fields of the wine"""
+        fields = {k: v for k, v in self.__dict__.items() if k in self.field_names()}
+        return fields
 
 
 class WineListUpload(models.Model):
@@ -247,3 +239,84 @@ class WineListUpload(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+class WineListEdition(models.Model):
+    """
+    parent table of the wines in WineListRaw and WineListDisplay. Stores information
+    such as publication date and other metadata.
+    """
+
+    winelistupload = models.ForeignKey(to=WineListUpload, on_delete=models.CASCADE)
+    filepath = models.CharField(default="")
+    pub_date = models.DateTimeField(unique=True)
+    run_dt = models.DateTimeField()
+
+    def __str__(self):
+        return str(f"Published: {self.pub_date.strftime('%Y/%m/%d')}")
+
+
+class WineListRaw(models.Model):
+    """
+    the raw data from the ETL.
+
+    Kept distinct from the Display data as the raw fields are used for linking
+    bennelong the output of the ETL to the Wine and Display models.
+    """
+
+    winelistedition = models.ForeignKey(to=WineListEdition, on_delete=models.CASCADE)
+    line_num_tot = models.IntegerField()
+    vintage = models.CharField(default="")
+    prod_wine_name = models.CharField(default="")
+    geo_int = models.CharField(default="")
+    vol = models.CharField(default="")
+    price = models.IntegerField(default=-1)
+    section_path = models.CharField(default="")
+    page_number = models.IntegerField()
+
+
+class WineListDisplay(models.Model):
+    """Bennelong wine list data"""
+
+    wine = models.ForeignKey(to=Wine, on_delete=models.PROTECT, null=True)
+    winelistraw = models.ForeignKey(to=WineListRaw, on_delete=models.CASCADE)
+    line_num_tot = models.IntegerField(default=-1)
+    vintage = models.CharField(default="")
+    prod_wine_name = models.CharField(default="")
+    geo_int = models.CharField(default="")
+    vol = models.CharField(default="")
+    price = models.IntegerField(default=-1)
+    section_path = models.CharField(default="")
+    page_number = models.IntegerField(default=-1)
+
+    def field_names(self):
+        return [
+            "wine",
+            "winelistraw",
+            "line_num_tot",
+            "vintage",
+            "prod_wine_name",
+            "geo_int",
+            "vol",
+            "price",
+            "section_path",
+            "page_number",
+        ]
+
+    def fields(self):
+        return {k: v for k, v in self.__dict__.items() if k in self.field_names()}
+
+    def __str__(self):
+        return f"{self.line_num_tot} {self.vintage} {self.prod_wine_name} {self.geo_int} {self.vol} {self.price} {self.page_number}"
+
+
+class FuzzyMatchListWiki(models.Model):
+    wine_list = models.ForeignKey(to=WineListDisplay, on_delete=models.PROTECT)
+    wine_list_query = models.CharField()
+    wiki = models.ForeignKey(to=Wine, on_delete=models.PROTECT)
+    wiki_choice = models.CharField()
+    match_score = models.FloatField()
+    review = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.wine_list} {self.wiki} {self.match_score}"

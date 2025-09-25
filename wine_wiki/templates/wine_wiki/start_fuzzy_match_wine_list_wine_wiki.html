@@ -1,0 +1,26 @@
+<!-- Waiting room prior to beginning the fuzzy match process. Provide the number of -->
+<!-- wines in the list that are not linked to a database wine. -->
+
+{% extends "wine_wiki/base.html" %} {% block content %}
+
+<div style="max-width: 120ch; margin: 0 auto">
+    <h1>Fuzzy Match Wine List to Wine Wiki</h1>
+    <p>
+        To Begin linking a wine list edition to the Wine Wiki you need to select
+        an edition to link, here referred to as 'left_edition' and a source
+        edition that has been previously linked, here referred to as
+        'right_edition'. Note that selecting the same edition both times will
+        raise an error.
+    </p>
+
+    <div>
+        <form method="POST">
+            {% csrf_token %} {{form}}
+
+            <button type="submit" style="margin-top: 10px">
+                Start Matching Process
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
