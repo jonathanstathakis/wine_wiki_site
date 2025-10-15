@@ -15,14 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path, include
-
-from wine_wiki.models import WineListUpload
+from django.urls import path
 from . import views
 from django.views.generic.base import RedirectView
 from django.views import generic
 from django.contrib import admin
-from debug_toolbar.toolbar import debug_toolbar_urls
+from .table_match_autofill.views import (
+    StartAutoFillPickEditionView,
+    AutoFillShowPickedEditionsView,
+    AutoFillReview,
+)
 
 app_name = "wine_wiki"
 
@@ -115,4 +117,15 @@ urlpatterns = [
         view=views.FuzzyMatchlistWikiSummaryView.as_view(),
         name="fuzzy-match-list-wiki-summary",
     ),
+    path(
+        "autofill/table-match-start-pick-edition/",
+        view=StartAutoFillPickEditionView.as_view(),
+        name="autofill-table-match-start-pick-edition",
+    ),
+    path(
+        "autofill/show-editions/",
+        view=AutoFillShowPickedEditionsView.as_view(),
+        name="autofill-show-editions",
+    ),
+    path("autofill/review/", view=AutoFillReview.as_view(), name="autofill-review"),
 ]

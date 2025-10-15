@@ -1,0 +1,26 @@
+<h1>Autofill: Selected Editions</h1>
+
+<div>
+    <p>The editions selected are displayed below:</p>
+    <ul>
+        <li>Left Edition: {{edition_left}}</li>
+        <li>Right Edition: {{edition_right}}</li>
+        <li>
+            Left Edition rows joined to a wine:
+            {{left_edition_linked_row_count}}
+        </li>
+        <li>
+            Right Edition rows joined to a wine:
+            {{right_edition_linked_row_count}}
+        </li>
+    </ul>
+</div>
+<p>
+    Click continue to proceed to autofilling the left edition from the right
+    edition.
+</p>
+
+<form method="POST" , action="{% url 'wine_wiki:autofill-show-editions' %}">
+    {% csrf_token %}
+    <button type="submit">Continue</button>
+</form>

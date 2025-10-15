@@ -95,6 +95,18 @@ class WineListDisplayDetailView(generic.DetailView):
 
 
 class WineListDisplayView(generic.ListView):
+    """
+    The display for the Bennelong wine list.
+    """
+
+    # TODO: add edition selector. Default to latest edition
+    # but provide option as a drop down at the top to select
+    # prior editions.
+    # TODO: add url link to linked wine.
+    # TODO: provide summary stats at top of page.
+    # TODO: search bar
+    # TODO: table of contents.
+
     model = WineListDisplay
     template_name = "wine_wiki/bennelong_wine_list.html"
     context_object_name = "wine_list"
@@ -338,6 +350,9 @@ def winelistupload_ingestfromcsv(request):
                         price=row["price"],
                         section_path=row["section_path"],
                         page_number=row["page_number"],
+                        wine_type=row["wine_type"],
+                        origin=row["origin"],
+                        varietal=row["varietal"],
                     )
                     wlr.save()
                     wld = WineListDisplay(
@@ -349,6 +364,9 @@ def winelistupload_ingestfromcsv(request):
                         price=row["price"],
                         section_path=row["section_path"],
                         page_number=row["page_number"],
+                        wine_type=row["wine_type"],
+                        origin=row["origin"],
+                        varietal=row["varietal"],
                         winelistraw=wlr,
                     )
                     wld.save()

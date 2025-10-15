@@ -59,7 +59,7 @@ class SubSection(models.Model):
     mixin class for wine list subcategories
     """
 
-    section = models.ForeignKey(Section, on_delete=models.PROTECT)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
     subsection = models.CharField(max_length=100, primary_key=True)
     order = models.IntegerField()
 
@@ -72,8 +72,8 @@ class SubSubSection(models.Model):
     mixin class for wine list subcategories
     """
 
-    section = models.ForeignKey(Section, on_delete=models.PROTECT)
-    subsection = models.ForeignKey(SubSection, on_delete=models.PROTECT)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    subsection = models.ForeignKey(SubSection, on_delete=models.CASCADE)
     subsubsection = models.CharField(max_length=100)
     order = models.IntegerField()
 
@@ -273,12 +273,15 @@ class WineListRaw(models.Model):
     price = models.IntegerField(default=-1)
     section_path = models.CharField(default="")
     page_number = models.IntegerField()
+    wine_type = models.CharField(default="")
+    origin = models.CharField(default="")
+    varietal = models.CharField(default="")
 
 
 class WineListDisplay(models.Model):
     """Bennelong wine list data"""
 
-    wine = models.ForeignKey(to=Wine, on_delete=models.PROTECT, null=True)
+    wine = models.ForeignKey(to=Wine, on_delete=models.CASCADE, null=True)
     winelistraw = models.ForeignKey(to=WineListRaw, on_delete=models.CASCADE)
     line_num_tot = models.IntegerField(default=-1)
     vintage = models.CharField(default="")
@@ -288,6 +291,9 @@ class WineListDisplay(models.Model):
     price = models.IntegerField(default=-1)
     section_path = models.CharField(default="")
     page_number = models.IntegerField(default=-1)
+    wine_type = models.CharField(default="")
+    origin = models.CharField(default="")
+    varietal = models.CharField(default="")
 
     def field_names(self):
         return [
@@ -301,19 +307,22 @@ class WineListDisplay(models.Model):
             "price",
             "section_path",
             "page_number",
+            "wine_type",
+            "origin",
+            "varietal",
         ]
 
     def fields(self):
         return {k: v for k, v in self.__dict__.items() if k in self.field_names()}
 
     def __str__(self):
-        return f"{self.line_num_tot} {self.vintage} {self.prod_wine_name} {self.geo_int} {self.vol} {self.price} {self.page_number}"
+        return f"{self.line_num_tot} {self.vintage} {self.prod_wine_name} {self.geo_int} {self.vol} {self.price} {self.page_number} {self.wine_type} {self.origin} {self.varietal}"
 
 
 class FuzzyMatchListWiki(models.Model):
-    wine_list = models.ForeignKey(to=WineListDisplay, on_delete=models.PROTECT)
+    wine_list = models.ForeignKey(to=WineListDisplay, on_delete=models.CASCADE)
     wine_list_query = models.CharField()
-    wiki = models.ForeignKey(to=Wine, on_delete=models.PROTECT)
+    wiki = models.ForeignKey(to=Wine, on_delete=models.CASCADE)
     wiki_choice = models.CharField()
     match_score = models.FloatField()
     review = models.BooleanField(default=False)
