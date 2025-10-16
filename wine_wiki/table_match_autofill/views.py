@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from . import models
 from wine_wiki.models import WineListEdition, WineListDisplay
 from .autofill import load_autofilleditions, load_autofillpending
-from .models import AutoFillEditions
+from .models import AutoFillEditions, AutoFillPending
 from django.http import HttpResponse
 
 
@@ -64,6 +64,7 @@ class AutoFillShowPickedEditionsView(generic.ListView):
 class AutoFillReview(generic.ListView):
     template_name = "table_match_autofill/autofill_review.html"
     model = AutoFillEditions
+    # TODO: turn this into a form with match rejection.
 
     def get_context_data(self, **kwargs):
         """
@@ -71,10 +72,16 @@ class AutoFillReview(generic.ListView):
         report the results.
         """
         # TODO: report results.
+        #
+        # what does that look like?
+        # left input, right match, connected wine.
 
         context = super().get_context_data(**kwargs)
 
+        # fetch the selected editions for matching
         wl_editions = context["object_list"][0]
         load_autofillpending(wl_editions=wl_editions)
+        # get the loaded autofillpending rows into context.
+        context["autofillpending"] = AutoFillPending.objects.all()
 
         return context

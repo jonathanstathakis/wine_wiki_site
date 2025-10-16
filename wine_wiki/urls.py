@@ -25,6 +25,11 @@ from .table_match_autofill.views import (
     AutoFillShowPickedEditionsView,
     AutoFillReview,
 )
+from .fuzzy_match_wiki.views import (
+    StartFuzzyMatchListWikiView,
+    fuzzymatchlistwiki_review_view,
+    FuzzyMatchlistWikiSummaryView,
+)
 
 app_name = "wine_wiki"
 
@@ -104,17 +109,17 @@ urlpatterns = [
     ),
     path(
         "start-fuzzy-match-list-wiki/",
-        view=views.StartFuzzyMatchListWikiView.as_view(),
+        view=StartFuzzyMatchListWikiView.as_view(),
         name="start-fuzzy-match-list-wiki",
     ),
     path(
         "fuzzy-match-list-wiki-results/",
-        view=views.fuzzymatchlistwiki_review_view,
+        view=fuzzymatchlistwiki_review_view,
         name="fuzzy-match-list-wiki-results",
     ),
     path(
         "fuzzy-match-list-wiki-summary/",
-        view=views.FuzzyMatchlistWikiSummaryView.as_view(),
+        view=FuzzyMatchlistWikiSummaryView.as_view(),
         name="fuzzy-match-list-wiki-summary",
     ),
     path(

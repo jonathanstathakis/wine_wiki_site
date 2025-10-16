@@ -1,1 +1,46 @@
-This is the review page.
+{% extends "wine_wiki/base.html" %} {% block content %}
+
+<h1>Autofill Match Review</h1>
+
+<p>
+    Please review each pairing row and mark review with a tick if the pairing is
+    correct. The default is to reject a pairing.
+</p>
+
+<h2>Results</h2>
+
+<table class="autofill-match-results">
+    <colgroup>
+        <col style="width: 40%" />
+        <col style="width: 40%" />
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+    </colgroup>
+    <tr>
+        <th>left edition line</th>
+        <th>right edition line</th>
+        <th>matched wine</th>
+        <th>Review</th>
+    </tr>
+    {% for row in autofillpending %}
+    <tr>
+        <td>
+            <a href="">{{ row.wine_list_left }}</a>
+        </td>
+        <td>
+            <a href="">{{ row.wine_list_right }}</a>
+        </td>
+        <td>
+            <a href="">{{ row.wiki }}</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td>no objects found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- TODO: add button to accept results, updating current left wine edition -->
+
+{% endblock %}

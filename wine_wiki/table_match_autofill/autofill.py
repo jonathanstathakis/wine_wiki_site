@@ -31,16 +31,10 @@ def run_self_join_query(edition_left_id, edition_right_id):
     with open(query_fp, "r") as f:
         query = f.read()
 
-    def run_autofillpending_insert_query():
-        with connection.cursor() as cursor:
-            for statement in query.split(";"):
-                cursor.execute(statement)
-        afp = models.AutoFillPending.objects.all()
-        return afp
-
-    results = run_autofillpending_insert_query()
-    print(results)
-    breakpoint()
+    with connection.cursor() as cursor:
+        for statement in query.split(";"):
+            cursor.execute(statement)
+    # afp = models.AutoFillPending.objects.all()
 
 
 def load_autofillpending(wl_editions):

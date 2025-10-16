@@ -1,9 +1,8 @@
-from .models import (
-    FuzzyMatchListWiki,
+from wine_wiki.models import (
     WineListDisplay,
     Wine,
-    WineListEdition,
 )
+from .models import FuzzyMatchListWiki
 from rapidfuzz import process
 
 
