@@ -14,6 +14,10 @@ logger = logging.getLogger(__name__)
 
 
 class StartFuzzyMatchListWikiView(generic.FormView):
+    """
+    first view of the fuzzy match process. Simply requests the user to select a wine list edition. On successful submission runs the fuzzy match for that edition, storing the results in FuzzyMatchListWiki.
+    """
+
     form_class = StartFuzzyMatchListWikiForm
     template_name = "fuzzy_match/start_fuzzy_match_wine_list_wine_wiki.html"
     success_url = reverse_lazy("wine_wiki:fuzzy-match-list-wiki-results")
@@ -46,36 +50,66 @@ class StartFuzzyMatchListWikiView(generic.FormView):
 
 
 def fuzzymatchlistwiki_review_view(request):
+    """
+    written as function because class based form views don't appear to support
+    formsets.
+
+    Displays the results of the preceeding fuzzy match computation through a
+    table rendered formset where each row is a row of the selected wine list
+    edition, its corresponding match, and a checkbox column titled 'review'
+    that the user can use to accept the result. On clicking submit the data
+    entered into the formset, in this case whether the box is checked or not,
+    is used to decide whether to update winelistdisplay to link it to the
+    matched wine. The results are also stored in the fuzzymatchresults table.
+    On completion of the POST request the user is redirected to a summary page.
+    """
+    # get all fuzzymatch results ordered by match score descending
     qs = FuzzyMatchListWiki.objects.all().order_by("-match_score")
 
+    # get the current wine list edition from the first row of the qs
+    # this is used to display the edition publication date at the top
+    # of the page.
     wle = qs[0].wine_list.winelistraw.winelistedition
 
     if request.method == "POST":
+        # generate a formset from the fuzzy match results
         formset = FuzzyMatchListWikiResultsFormSet(
             request.POST, request.FILES, queryset=qs
         )
         if formset.is_valid():
+            # for each row/form in the formset..
             for form in formset:
+                # if the row's input is validated..
                 if form.cleaned_data:
+                    # get the value of review (whether the user accepts the result)
                     review_val = form.cleaned_data["review"]
+                    # if user accepts..
                     if review_val:
+                        # get the id of the row..
                         id = form.cleaned_data["id"].id
 
-                        # update FuzzyMatchListWiki
+                        ## update FuzzyMatchListWiki
+                        # get the match result row corresponding to the accepted result in the formset..
                         match_result = FuzzyMatchListWiki.objects.get(id=id)
+                        # set the review value to True
                         match_result.review = review_val
+                        # save the result.
                         match_result.save()
 
-                        # update winelistdisplay
+                        # also update winelistdisplay to link it to the matched wiki entry.
                         wiki = match_result.wiki
                         list_wine = match_result.wine_list
                         list_wine.wine = wiki
                         list_wine.save()
 
+            # redirect to the summary page.
             return HttpResponseRedirect("/fuzzy-match-list-wiki-summary/")
+    # if a POST request is not made.. (don't know when this would happen)
     else:
         formset = FuzzyMatchListWikiResultsFormSet(queryset=qs)
 
+    # because forms work by first sending the render request then a second
+    # request is made to do the POST action, the flow is inverted from expectations. Hence this return statement is the first thing that happens on page request.
     return render(
         request=request,
         template_name="fuzzy_match/fuzzy_match_list_wiki_results.html",
@@ -87,6 +121,7 @@ class FuzzyMatchlistWikiSummaryView(generic.ListView):
     """
     Provides a summary of results review - how many pairs were
     joined.
+    Simply displays the results stored in FuzzyMatchListWiki.
     """
 
     model = FuzzyMatchListWiki

@@ -40,10 +40,9 @@ def run_self_join_query(edition_left_id, edition_right_id):
 def load_autofillpending(wl_editions):
     """ """
 
-    from wine_wiki.models import WineListDisplay, WineListRaw
-
-    edition_left_id = wl_editions.edition_left.id
-    edition_right_id = wl_editions.edition_right.id
+    wl_editions["edition_left_id"]
+    edition_left_id = wl_editions["edition_left_id"]
+    edition_right_id = wl_editions["edition_right_id"]
 
     autofillpending = run_self_join_query(
         edition_left_id=edition_left_id, edition_right_id=edition_right_id

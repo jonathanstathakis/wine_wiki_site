@@ -34,6 +34,9 @@ class AutoFillShowPickedEditionsView(generic.ListView):
     template_name = "table_match_autofill/show_editions.html"
 
     def post(self, request):
+        # assumes there is always only one row.
+        wl_editions = self.get_queryset().values()[0]
+        load_autofillpending(wl_editions=wl_editions)
         return redirect("wine_wiki:autofill-review")
 
     def get_context_data(self, **kwargs):
@@ -63,25 +66,6 @@ class AutoFillShowPickedEditionsView(generic.ListView):
 
 class AutoFillReview(generic.ListView):
     template_name = "table_match_autofill/autofill_review.html"
-    model = AutoFillEditions
+    model = AutoFillPending
+    context_object_name = "autofillpending"
     # TODO: turn this into a form with match rejection.
-
-    def get_context_data(self, **kwargs):
-        """
-        Main purpose is to run the auto join, update autofillpending and
-        report the results.
-        """
-        # TODO: report results.
-        #
-        # what does that look like?
-        # left input, right match, connected wine.
-
-        context = super().get_context_data(**kwargs)
-
-        # fetch the selected editions for matching
-        wl_editions = context["object_list"][0]
-        load_autofillpending(wl_editions=wl_editions)
-        # get the loaded autofillpending rows into context.
-        context["autofillpending"] = AutoFillPending.objects.all()
-
-        return context
