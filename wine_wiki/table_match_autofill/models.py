@@ -48,3 +48,6 @@ class AutoFillPending(models.Model):
     )
     wiki = models.OneToOneField(to=Wine, on_delete=models.CASCADE, null=True)
     review = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.autofilledition=}, {self.wine_list_left=}, {self.wine_list_right=}, {self.wiki=}, {self.review=}"

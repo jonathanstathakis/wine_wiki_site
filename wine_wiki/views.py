@@ -77,7 +77,6 @@ class WineListView(generic.ListView):
 
 
 class WineListDisplayDetailView(generic.DetailView):
-    model = WineListDisplay
     template_name = "wine_wiki/bennelong_wine_list_detail.html"
     context_object_name = "wine"
 

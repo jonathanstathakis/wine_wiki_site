@@ -23,7 +23,9 @@ from django.contrib import admin
 from .table_match_autofill.views import (
     StartAutoFillPickEditionView,
     AutoFillShowPickedEditionsView,
-    AutoFillReview,
+    autofill_results_view,
+    AutofillSummaryView,
+    AutofillConclusion,
 )
 from .fuzzy_match_wiki.views import (
     StartFuzzyMatchListWikiView,
@@ -132,5 +134,13 @@ urlpatterns = [
         view=AutoFillShowPickedEditionsView.as_view(),
         name="autofill-show-editions",
     ),
-    path("autofill/review/", view=AutoFillReview.as_view(), name="autofill-review"),
+    path("autofill/review/", view=autofill_results_view, name="autofill-review"),
+    path(
+        "autofill/summary/", view=AutofillSummaryView.as_view(), name="autofill-summary"
+    ),
+    path(
+        "autofill/conclusion/",
+        view=AutofillConclusion.as_view(),
+        name="autofill-conclusion",
+    ),
 ]

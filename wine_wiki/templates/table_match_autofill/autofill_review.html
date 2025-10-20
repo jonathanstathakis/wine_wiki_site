@@ -1,46 +1,38 @@
 {% extends "wine_wiki/base.html" %} {% block content %}
-
 <h1>Autofill Match Review</h1>
 
-<p>
-    Please review each pairing row and mark review with a tick if the pairing is
-    correct. The default is to reject a pairing.
-</p>
+<p>Number of rows: {{formset|length}}</p>
 
 <h2>Results</h2>
 
-<table class="autofill-match-results">
-    <colgroup>
-        <col style="width: 40%" />
-        <col style="width: 40%" />
-        <col style="width: 10%" />
-        <col style="width: 10%" />
-    </colgroup>
-    <tr>
-        <th>left edition line</th>
-        <th>right edition line</th>
-        <th>matched wine</th>
-        <th>Review</th>
-    </tr>
-    {% for row in autofillpending %}
-    <tr>
-        <td>
-            <a href="">{{ row.wine_list_left }}</a>
-        </td>
-        <td>
-            <a href="">{{ row.wine_list_right }}</a>
-        </td>
-        <td>
-            <a href="">{{ row.wiki }}</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td>no objects found</td>
-    </tr>
-    {% endfor %}
-</table>
+<form method="post" action="">
+    <input type="submit" value="OK" />
+    {% csrf_token %} {{formset.management_form}}
+    <table class="fuzzy_match_results">
+        <colgroup>
+            <!-- <col style="width: 40%" /> -->
+            <!-- <col style="width: 40%" /> -->
+            <!-- <col style="width: 10%" /> -->
+            <!-- <col style="width: 10%" /> -->
+        </colgroup>
+        <tr>
+            <th>entry to be linked</th>
+            <th>wiki entry</th>
+            <th>linking from</th>
+            <th>review</th>
+        </tr>
+        {% for form in formset %} {% for field in form.hidden_fields %}
+        {{field}} {% endfor %}
+        <tr>
+            <td>{{ form.instance.wine_list_left}}</td>
+            <td>{{ form.instance.wiki }}</td>
+            <td>{{form.instance.wine_list_right}}</td>
+            <td>{{ form.review }}</td>
+        </tr>
 
-<!-- TODO: add button to accept results, updating current left wine edition -->
+        {% endfor %}
+    </table>
+</form>
 
+<p>form ends here.</p>
 {% endblock %}

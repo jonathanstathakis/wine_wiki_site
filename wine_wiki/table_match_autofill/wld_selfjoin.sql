@@ -12,7 +12,8 @@ with
     wlr.geo_int as geo_int,
     wlr.vol,
     wlr.varietal,
-    afe.id as autofilledition_id
+    afe.id as autofilledition_id,
+    wlr.vintage || wlr.prod_wine_name || wlr.geo_int || wlr.varietal || wlr.vol as join_key
     from
         wine_wiki_autofilleditions afe
     left join
@@ -35,7 +36,8 @@ with
     wlr.geo_int as geo_int,
     wlr.vol,
     wlr.varietal,
-    afe.id as autofilledition_id
+    afe.id as autofilledition_id,
+    wlr.vintage || wlr.prod_wine_name || wlr.geo_int || wlr.varietal || wlr.vol as join_key
     from
         wine_wiki_autofilleditions afe
     left join
@@ -59,21 +61,15 @@ with
     l.prod_wine_name,
     l.geo_int,
     l.vol,
-    l.vintage || l.prod_wine_name || l.geo_int || l.varietal || l.vol as left_join_key,
-    r.vintage || r.prod_wine_name || r.geo_int || l.varietal || r.vol as right_join_key,
-    l.autofilledition_id as autofilledition_id
+    l.autofilledition_id as autofilledition_id,
+    l.join_key as left_join_key,
+    r.join_key as right_join_key
   from
     wlr_left l
   inner join
     wlr_right r
   on
-    l.vintage = r.vintage
-  and
-    l.prod_wine_name = r.prod_wine_name
-  and
-    l.geo_int = r.geo_int
-  and
-    l.vol = r.vol
+    l.join_key = r.join_key
 ),
   -- join with winelistdisplay
   with_wine_ids as (

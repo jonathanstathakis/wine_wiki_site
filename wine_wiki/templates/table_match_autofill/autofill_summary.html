@@ -1,0 +1,32 @@
+<!-- TODO: pretty up summary page. -->
+<!-- TODO: add conclusion page something like "x wines of edition y updated" -->
+{% extends "wine_wiki/base.html" %} 
+{% block content %} 
+<h1>Autofill Summary</h1>
+<p>
+The following connections have been made. Press submit to enact these changes.
+</p>
+<form method="post" action="" style="padding: 1em">
+  <input type="submit" value="Submit", style="height: 3em; width: 6em; font-size: large">
+  {% csrf_token %}
+  </form>
+<table class='fuzzy_match_results'>
+  <tr>
+  <th>
+      wine list entry
+    </th>
+  <th>
+    wiki entry 
+<th>
+    </tr>
+{% for row in autofill_pending_items %} 
+<tr>
+<td>{{row.wine_list_left}} </td>
+<td>{{row.wiki}}</td>
+</tr>
+{% empty %} 
+Nothing in the pending table.
+{% endfor %} 
+</table>
+{% endblock %}
+
