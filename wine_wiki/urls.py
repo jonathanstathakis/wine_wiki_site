@@ -51,6 +51,11 @@ urlpatterns = [
         name="changelog",
     ),
     path(
+        "wine-list/management/bennelong",
+        view=views.BennelongWineListManagement.as_view(),
+        name="bennelong-wine-list-management",
+    ),
+    path(
         "bennelong-wine-list/",
         view=views.WineListDisplayView.as_view(),
         name="bennelong-wine-list",

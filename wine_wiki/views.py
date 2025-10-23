@@ -371,3 +371,7 @@ def winelistupload_ingestfromcsv(request):
     else:
         form = WineListRawIngestionForm(request.POST)
     return render(request, "wine_wiki/winelistraw_create.html", {"form": form})
+
+
+class BennelongWineListManagement(generic.TemplateView):
+    template_name = "wine_wiki/bennelong_wine_list_management.html"

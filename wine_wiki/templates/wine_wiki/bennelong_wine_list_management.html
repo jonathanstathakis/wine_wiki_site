@@ -1,0 +1,27 @@
+{% extends "wine_wiki/base.html" %} {% block content %}
+<h1>Bennelong Wine List</h1>
+
+<ul>
+        <li>
+            <a href="{% url 'wine-wiki:bennelong-wine-list' %}">Bennelong Wine List</a> (display as per printed wine list)
+        </li>
+  </ul>
+
+<h2>Wine List Management</h2>
+
+<ul>
+        <li> 
+        <a href={% url 'wine-wiki:wine-list-upload-list' %}> Bennelong Wine List Uploads </a>
+      </li>
+        <li> 
+        <a href={% url 'wine-wiki:wine-list-raw-create' %}> Create Wine List Entry from Uploaded CSV </a>
+      </li>
+        <li> 
+        <a href={% url 'wine-wiki:start-fuzzy-match-list-wiki' %}> Wine List to Wiki Fuzzy Match </a>
+      </li>
+        <li> 
+        <a href={% url 'wine-wiki:autofill-table-match-start-pick-edition' %}> Update Wine List Edition with Wine Links from Prior Edition</a>
+      </li>
+</ul>
+
+{% endblock %}
