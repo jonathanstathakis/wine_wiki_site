@@ -5,15 +5,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('wine_wiki', '0034_alter_winelistraw_pub_date'),
+        ("wine_wiki", "0034_alter_winelistraw_pub_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='winelistraw',
-            name='wine_list_display',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='wine_wiki.winelistdisplay'),
+            model_name="winelistraw",
+            name="wine_list_display",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="wine_wiki.winelistdisplay",
+            ),
         ),
     ]

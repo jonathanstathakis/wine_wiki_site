@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("wine_wiki", "0035_alter_winelistraw_wine_list_display"),
+        ("wine_wiki", "0035_create_winelistdisplay"),
     ]
 
     operations = [
@@ -15,34 +15,34 @@ class Migration(migrations.Migration):
             name="winelistdisplay",
             options={},
         ),
-        migrations.RemoveField(
-            model_name="winelistdisplay",
-            name="page_line_num",
-        ),
-        migrations.RemoveField(
-            model_name="winelistdisplay",
-            name="page_num",
-        ),
-        migrations.RemoveField(
-            model_name="winelistdisplay",
-            name="section",
-        ),
-        migrations.RemoveField(
-            model_name="winelistdisplay",
-            name="subsection",
-        ),
-        migrations.RemoveField(
-            model_name="winelistdisplay",
-            name="subsubsection",
-        ),
-        migrations.RemoveField(
-            model_name="winelistraw",
-            name="wine",
-        ),
-        migrations.RemoveField(
-            model_name="winelistraw",
-            name="wine_list_display",
-        ),
+        # migrations.RemoveField(
+        #     model_name="winelistdisplay",
+        #     name="page_line_num",
+        # ),
+        # migrations.RemoveField(
+        #     model_name="winelistdisplay",
+        #     name="page_num",
+        # ),
+        # migrations.RemoveField(
+        #     model_name="winelistdisplay",
+        #     name="section",
+        # ),
+        # migrations.RemoveField(
+        #     model_name="winelistdisplay",
+        #     name="subsection",
+        # ),
+        # migrations.RemoveField(
+        #     model_name="winelistdisplay",
+        #     name="subsubsection",
+        # ),
+        # migrations.RemoveField(
+        #     model_name="winelistraw",
+        #     name="wine",
+        # ),
+        # migrations.RemoveField(
+        #     model_name="winelistraw",
+        #     name="wine_list_display",
+        # ),
         migrations.AddField(
             model_name="winelistdisplay",
             name="geo_int",
